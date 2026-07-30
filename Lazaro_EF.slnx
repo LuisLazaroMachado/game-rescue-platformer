@@ -1,0 +1,7 @@
+<Solution>
+  <Configurations>
+    <Platform Name="x64" />
+    <Platform Name="x86" />
+  </Configurations>
+  <Project Path="Lazaro_EF/Lazaro_EF.vcxproj" Id="b1b7672a-a123-41a1-9ea1-1ecf6e5dce50" />
+</Solution>

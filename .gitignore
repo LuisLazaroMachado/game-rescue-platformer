@@ -1,0 +1,27 @@
+@"
+.vs/
+*.vsidx
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+[Dd]ebug/
+[Rr]elease/
+x64/
+x86/
+[Bb]in/
+[Oo]bj/
+*.obj
+*.pdb
+*.ilk
+*.idb
+*.log
+*.tlog
+*.lastbuildstate
+unsuccessfulbuild
+ipch/
+*.ipch
+CopilotIndices/
+*.exe.recipe
+*.vcxproj.FileListAbsolute.txt
+"@ | Out-File -Encoding utf8 .gitignore
