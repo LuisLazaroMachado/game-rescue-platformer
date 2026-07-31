@@ -2,7 +2,7 @@
 
 A 2D platformer built in **C++** with **SDL3**, developed as a final exam project for a game development course. The player must jump across platforms and reach the exit zone without falling into the void.
 
-![Gameplay](media/gameplay_adventure.gif)---
+![Gameplay](media/gameplay_rescue.gif)---
 
 ---
 
