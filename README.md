@@ -3,6 +3,7 @@
 A 2D platformer built in **C++** with **SDL3**, developed as a final exam project for a game development course. The player must jump across platforms and reach the exit zone without falling into the void.
 
 ![Gameplay](media/gameplay_rescue.gif)
+
 ---
 
 ## 🎮 About the game
@@ -27,13 +28,13 @@ Guide the character across a hand-crafted level made of solid platforms at diffe
 
 ## ✨ Features
 
-- **Physics-based movement:** constant gravity (1000 px/s²) and a fixed jump impulse (−450 px/s), only triggered while grounded.
-- **Tile-based level:** an 18×25 grid map (three tile types — air, solid, exit) rendered from a 16×16 tileset, scaled 2x to 32×32 on screen.
-- **AABB collision:** axis-separated collision resolution against the tilemap (X and Y solved independently), preventing the player from tunneling through blocks; vertical velocity resets to zero on landing.
-- **State-driven animation:** Idle, Run, Jump, and Fall states, each mapped to its own sprite strip, with per-frame timing (~0.1s) and horizontal flipping based on movement direction.
-- **Lives & respawn system:** 3 lives; falling off the map costs a life and respawns the player at the start; reaching 0 lives ends the run.
-- **Audio:** looping background music, a jump sound effect, and a death sound effect on losing a life.
-- **HUD:** live lives counter and elapsed time via `SDL_RenderDebugTextFormat`, plus a large win/lose message at the end of the run.
+- **Physics-based movement:** gravity and grounded-only jump
+- **Tile-based level:** 18×25 grid map
+- **AABB collision** against the tilemap
+- **Animation states:** Idle / Run / Jump / Fall
+- **Lives and respawn:** 3 lives
+- **Audio:** looping music and sound effects
+- **HUD:** lives counter and elapsed time
 
 ---
 
@@ -48,11 +49,14 @@ Guide the character across a hand-crafted level made of solid platforms at diffe
 
 ## 🧠 Technical highlights
 
-- **Tilemap-driven level design:** level layout defined as a simple character-grid data structure, decoupled from rendering, allowing the level to be edited by changing a string array.
-- **Axis-separated AABB collision:** resolves horizontal and vertical collisions independently per frame, checking ground contact via the tile directly beneath the player's center rather than a full rectangle sweep, avoiding the "landing wobble" that naive AABB implementations run into.
-- **Runtime-computed animation frame counts:** frame counts are derived at load time from each spritesheet's actual texture width (`textureWidth / frameWidth`) instead of being hardcoded, making the animation system resilient to spritesheet changes.
-- **Audio engine integration:** built on SDL3_mixer's Track/Mixer API, with a dedicated track for looping music and a separate track for one-shot sound effects (jump, death).
-- **Delta-time-based simulation:** all movement, physics, and animation timing are frame-rate independent, driven by a clamped delta time to avoid instability on frame spikes.
+- **Tilemap-driven level design:** the level is a character-grid data structure decoupled from rendering, so it can be edited by changing a string array. The 18×25 map uses three tile types (air, solid, exit) drawn from a 16×16 tileset scaled 2x to 32×32 on screen.
+- **Axis-separated AABB collision:** horizontal and vertical collisions are resolved independently per frame, preventing tunneling through blocks; vertical velocity resets to zero on landing. Ground detection checks the tile beneath the player's center, which keeps the logic simple; known limitation: partial support on platform edges is not detected.
+- **Physics constants:** gravity of 1000 px/s² and a fixed jump impulse of −450 px/s, triggered only while grounded.
+- **State-driven animation:** each state (Idle, Run, Jump, Fall) maps to its own sprite strip, with ~0.1 s per frame and horizontal flipping based on movement direction.
+- **Runtime-computed animation frame counts:** frame counts are derived at load time from each spritesheet's texture width (`textureWidth / frameWidth`) instead of being hardcoded, so the system tolerates spritesheet changes.
+- **Audio integration:** built on SDL3_mixer's Track/Mixer API, with a dedicated track for looping music and a separate track for one-shot effects (jump, death).
+- **Delta-time-based simulation:** movement, physics, and animation timing are frame-rate independent, driven by a clamped delta time to avoid instability on frame spikes.
+- **HUD:** lives and elapsed time rendered via `SDL_RenderDebugTextFormat`, plus a large win/lose message at the end of the run.
 
 ---
 
@@ -76,17 +80,25 @@ This project follows a single-file architecture (`Lazaro_EF.cpp`), as required b
 
 ## 🎨 Asset credits
 
-Character, terrain, and background sprites are from a pixel-art asset pack provided as part of the exam template. Sound effects and music were provided as part of the same template.
+Character, terrain, and background sprites, as well as sound effects and music, were provided by the course instructor as part of the exam template. The original authors and licenses of these assets are not known to the author of this repository.
+
+These assets are **not** covered by this project's MIT license.
 
 ---
 
 ## ▶️ Play without building
 
-You can download the pre-built executable (with all required DLLs) from the **[Releases](../../releases)** section of this repository, if available. Otherwise, see the build instructions below.
+Download the latest version from [Releases](https://github.com/LuisLazaroMachado/game-rescue-platformer/releases/latest) (Windows x64: unzip and run).
+
+> Windows may show a SmartScreen warning because the executable is unsigned: click **More info → Run anyway**.
+
+---
 
 ## 🚀 Building from source
 
-This project relies on external native libraries that are not included in the repository (due to size). To build it:
+This project relies on external native libraries that are not included in the repository (due to size).
+
+**Requirements:** Visual Studio 2026 (v18.1, MSVC, x64), C++17, SDL3 3.4.1, SDL3_image 3.4.8, SDL3_mixer 3.4.1.
 
 1. Clone the repository.
 2. Download the **VC** (not MinGW) development versions of:
@@ -95,7 +107,16 @@ This project relies on external native libraries that are not included in the re
    - [SDL3_mixer](https://github.com/libsdl-org/SDL_mixer/releases)
 3. Place them on your system and configure the include/library paths in Visual Studio project properties (**C/C++ → General → Additional Include Directories**, **Linker → General → Additional Library Directories**, **Linker → Input → Additional Dependencies**), pointing to your SDL3 installation.
 4. Build in `Debug` or `Release` mode for `x64`.
-5. Run the generated `.exe` — make sure `SDL3.dll`, `SDL3_image.dll`, and `SDL3_mixer.dll` are next to it, along with the `assets/` folder.
+5. Run the generated `.exe`. Make sure `SDL3.dll`, `SDL3_image.dll`, and `SDL3_mixer.dll` are next to it, along with the `assets/` folder.
+
+---
+
+## ⚠️ Known limitations & next steps
+
+- Single level, no menu or pause
+- No gamepad support
+- Ground check uses the player's center only
+- Single-file architecture (exam requirement)
 
 ---
 
@@ -107,4 +128,4 @@ This project relies on external native libraries that are not included in the re
 
 ## 📄 License
 
-This project is distributed under the MIT License. See [LICENSE](LICENSE) for details.
+This project's code is distributed under the MIT License. See [LICENSE](LICENSE) for details.
